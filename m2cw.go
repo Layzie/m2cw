@@ -36,38 +36,32 @@ func main() {
 	app.Version = "0.0.1"
 	app.Action = func(c *cli.Context) {
 		arg := c.Args().First()
+
 		fmt.Println("Start watching md file. <C-c> makes stop the command.")
+
 		watcher, err := fsnotify.NewWatcher()
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		done := make(chan bool)
-
-		// Process events
-		go func() {
-			for {
-				select {
-				case ev := <-watcher.Event:
-					// log.Println("event:", ev)
-					if ev.Name == c.Args().First() {
-						md2conf(c)
-						log.Println("convert md to wiki ", ev.Name+" -> "+strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki")
-					}
-				case err := <-watcher.Error:
-					log.Println("error:", err)
-				}
-			}
-		}()
 
 		err = watcher.Watch("./")
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		<-done
+		defer watcher.Close()
 
-		watcher.Close()
+		for {
+			select {
+			case ev := <-watcher.Event:
+				if ev.Name == c.Args().First() {
+					md2conf(c)
+					log.Println("convert md to wiki ", ev.Name+" -> "+strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki")
+				}
+			case err := <-watcher.Error:
+				log.Println("error:", err)
+			}
+		}
 	}
 
 	app.Run(os.Args)
