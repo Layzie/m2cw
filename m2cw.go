@@ -14,7 +14,8 @@ import (
 )
 
 func md2conf(c *cli.Context) {
-	cmd := exec.Command("markdown2confluence", c.Args().First())
+	arg := c.Args().First()
+	cmd := exec.Command("markdown2confluence", arg)
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
@@ -23,7 +24,7 @@ func md2conf(c *cli.Context) {
 		log.Fatal(err)
 	}
 
-	ioutil.WriteFile(strings.TrimSuffix(c.Args().First(), filepath.Ext(c.Args().First()))+".wiki", out.Bytes(), 0644)
+	ioutil.WriteFile(strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki", out.Bytes(), 0644)
 }
 
 func main() {
@@ -34,6 +35,7 @@ func main() {
 	app.Email = "saruko313@gmail.com"
 	app.Version = "0.0.1"
 	app.Action = func(c *cli.Context) {
+		arg := c.Args().First()
 		fmt.Println("Start watching md file. <C-c> makes stop the command.")
 		watcher, err := fsnotify.NewWatcher()
 		if err != nil {
@@ -50,7 +52,7 @@ func main() {
 					// log.Println("event:", ev)
 					if ev.Name == c.Args().First() {
 						md2conf(c)
-						log.Println("convert md to wiki ", ev.Name+" -> "+strings.TrimSuffix(c.Args().First(), filepath.Ext(c.Args().First()))+".wiki")
+						log.Println("convert md to wiki ", ev.Name+" -> "+strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki")
 					}
 				case err := <-watcher.Error:
 					log.Println("error:", err)
