@@ -18,10 +18,12 @@ $ go get github.com/Layzie/m2cw
 ```sh
 $ cd go/to/markdown
 $ m2cw example.md
-Start watching md file. <C-c> makes stop the command.
+Start watching example.md. <C-c> makes stop the command.
 # if you edit example.md then convert to example.wiki on same directory
-2015/04/16 19:06:12 convert md to wiki  example.md -> example.wiki
-2015/04/16 19:07:23 convert md to wiki  example.md -> example.wiki
+2015/04/16 20:58:42 convert md to wiki  example.md -> example.wiki
+2015/04/16 20:58:56 convert md to wiki  example.md -> example.wiki
+2015/04/16 20:58:57 convert md to wiki  example.md -> example.wiki
+2015/04/16 20:58:57 convert md to wiki  example.md -> example.wiki
 ```
 
 ## Licence
