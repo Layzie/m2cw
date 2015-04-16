@@ -24,7 +24,11 @@ func md2conf(c *cli.Context) {
 		log.Fatal(err)
 	}
 
-	ioutil.WriteFile(strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki", out.Bytes(), 0644)
+	ioutil.WriteFile(
+		strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki",
+		out.Bytes(),
+		0644,
+	)
 }
 
 func main() {
@@ -37,7 +41,7 @@ func main() {
 	app.Action = func(c *cli.Context) {
 		arg := c.Args().First()
 
-		fmt.Println("Start watching md file. <C-c> makes stop the command.")
+		fmt.Println("Start watching " + arg + ". <C-c> makes stop the command.")
 
 		watcher, err := fsnotify.NewWatcher()
 		if err != nil {
@@ -56,7 +60,10 @@ func main() {
 			case ev := <-watcher.Event:
 				if ev.Name == c.Args().First() {
 					md2conf(c)
-					log.Println("convert md to wiki ", ev.Name+" -> "+strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki")
+					log.Println(
+						"convert md to wiki ",
+						ev.Name+" -> "+strings.TrimSuffix(arg, filepath.Ext(arg))+".wiki",
+					)
 				}
 			case err := <-watcher.Error:
 				log.Println("error:", err)
