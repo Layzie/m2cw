@@ -58,7 +58,7 @@ func main() {
 		for {
 			select {
 			case ev := <-watcher.Event:
-				if ev.Name == c.Args().First() {
+				if ev.Name == arg {
 					md2conf(c)
 					log.Println(
 						"convert md to wiki ",
