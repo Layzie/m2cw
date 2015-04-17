@@ -3,14 +3,15 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/codegangsta/cli"
-	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/codegangsta/cli"
+	"github.com/howeyc/fsnotify"
 )
 
 func md2conf(c *cli.Context) {
